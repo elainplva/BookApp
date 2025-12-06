@@ -16,7 +16,7 @@ interface NoteDao {
     suspend fun insertNote(note: NoteEntity): Long
 
     @Query("SELECT * FROM notes WHERE bookId = :bookId ORDER BY createdAt DESC")
-    fun getNotesForBook(bookId: Int): Flow<List<NoteEntity>>
+    fun getNotesForBook(bookId: Long): Flow<List<NoteEntity>>
 
     @Update
     suspend fun updateNote(note: NoteEntity)
@@ -25,5 +25,5 @@ interface NoteDao {
     suspend fun deleteNote(note: NoteEntity)
 
     @Query("DELETE FROM notes WHERE bookId = :bookId")
-    suspend fun deleteAllNotesForBook(bookId: Int)
+    suspend fun deleteAllNotesForBook(bookId: Long)
 }

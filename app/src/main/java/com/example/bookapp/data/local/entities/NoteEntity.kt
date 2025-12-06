@@ -2,6 +2,7 @@ package com.example.bookapp.data.local.entities
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -13,7 +14,8 @@ import androidx.room.PrimaryKey
             childColumns = ["bookId"],
             onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index(value = ["bookId"])]
 )
 data class NoteEntity(
     @PrimaryKey(autoGenerate = true)

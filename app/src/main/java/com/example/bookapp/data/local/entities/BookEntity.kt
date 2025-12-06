@@ -6,10 +6,10 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "books")
 data class BookEntity(
     @PrimaryKey(autoGenerate = true)
-    var id: Int = 0,
+    var id: Long = 0,
     var title: String,
     var author: String,
-    var description: String,
+    var synopsis: String,
     val coverUrl: String? = null,
     var rating: Float = 0f,
     var review: String = "",
