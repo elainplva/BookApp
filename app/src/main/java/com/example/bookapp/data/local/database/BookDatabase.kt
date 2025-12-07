@@ -62,7 +62,7 @@ abstract class BookDatabase : RoomDatabase() {
         suspend fun prepopulateDatabase(bookDao: BookDao) {
             val books = listOf(
                 BookEntity(
-                    title = "Harry Potter and the Philosopher's Stone",
+                    title = "Harry Potter and the philophser stone",
                     author = "J.K. Rowling",
                     synopsis = "Harry Potter has never even heard of Hogwarts when the letters start dropping on the doormat at number four, Privet Drive. Addressed in green ink on yellowish parchment with a purple seal, they are swiftly confiscated by his grisly aunt and uncle.",
                     coverUrl = "https://m.media-amazon.com/images/I/81m1s4wIPML._AC_UF1000,1000_QL80_.jpg"

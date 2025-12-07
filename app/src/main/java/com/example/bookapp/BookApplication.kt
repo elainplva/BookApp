@@ -4,7 +4,9 @@ import android.app.Application
 import androidx.work.Configuration
 import com.example.bookapp.data.local.database.BookDatabase
 import com.example.bookapp.data.repository.BookRepository
+import com.example.bookapp.data.repository.SettingsRepository
 import com.example.bookapp.data.repository.UserRepository
+import com.example.bookapp.ui.screens.account.AccountViewModel
 
 /**
  * Custom Application class to provide a single instance of the database and repositories.
@@ -15,6 +17,7 @@ class BookApplication : Application(), Configuration.Provider {
     val database: BookDatabase by lazy { BookDatabase.getDatabase(this) }
     val bookRepository: BookRepository by lazy { BookRepository(database.bookDao()) }
     val userRepository: UserRepository by lazy { UserRepository(database.userDao()) }
+    val settingsRepository: SettingsRepository by lazy { SettingsRepository(this) }
 
     override val workManagerConfiguration: Configuration
         get() = Configuration.Builder()

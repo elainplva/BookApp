@@ -10,6 +10,9 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.example.bookapp.BookApplication
+import com.example.bookapp.ui.screens.account.AccountScreen
+import com.example.bookapp.ui.screens.account.AccountViewModel
+import com.example.bookapp.ui.screens.account.AccountViewModelFactory
 import com.example.bookapp.ui.screens.auth.AuthViewModel
 import com.example.bookapp.ui.screens.auth.AuthViewModelFactory
 import com.example.bookapp.ui.screens.auth.LoginScreen
@@ -23,6 +26,8 @@ import com.example.bookapp.ui.screens.home.HomeScreen
 import com.example.bookapp.ui.screens.home.HomeViewModel
 import com.example.bookapp.ui.screens.home.HomeViewModelFactory
 import com.example.bookapp.ui.screens.settings.SettingsScreen
+import com.example.bookapp.ui.screens.settings.SettingsViewModel
+import com.example.bookapp.ui.screens.settings.SettingsViewModelFactory
 
 sealed class Screen(val route: String) {
     object Home : Screen("home")
@@ -32,6 +37,7 @@ sealed class Screen(val route: String) {
     object Favorites : Screen("favorites")
     object Login : Screen("login")
     object Settings : Screen("settings")
+    object Account : Screen("account")
 }
 
 @Composable
@@ -41,6 +47,7 @@ fun NavGraph(navController: NavHostController) {
     // Get the singleton repository instances from the Application class.
     val bookRepository = remember { application.bookRepository }
     val userRepository = remember { application.userRepository }
+    val settingsRepository = remember { application.settingsRepository }
 
     NavHost(
         navController = navController,
@@ -100,7 +107,22 @@ fun NavGraph(navController: NavHostController) {
         }
 
         composable(route = Screen.Settings.route) {
+            val viewModel: SettingsViewModel = viewModel(
+                factory = SettingsViewModelFactory(settingsRepository)
+            )
             SettingsScreen(
+                viewModel = viewModel,
+                onBackClick = { navController.popBackStack() },
+                onAccountClick = { navController.navigate(Screen.Account.route) }
+            )
+        }
+
+        composable(route = Screen.Account.route) {
+            val viewModel: AccountViewModel = viewModel(
+                factory = AccountViewModelFactory(userRepository)
+            )
+            AccountScreen(
+                viewModel = viewModel,
                 onBackClick = { navController.popBackStack() }
             )
         }
