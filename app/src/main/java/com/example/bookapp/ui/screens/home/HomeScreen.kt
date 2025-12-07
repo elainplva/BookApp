@@ -27,7 +27,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -54,12 +53,6 @@ fun HomeScreen(
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val books by viewModel.books.collectAsState()
-    val allBooks by viewModel.allBooksForCheck.collectAsState()
-
-    // Auto-load books on first launch
-    LaunchedEffect(Unit) {
-        viewModel.loadBooksIfNeeded()
-    }
 
     Scaffold(
         bottomBar = {
@@ -128,21 +121,6 @@ fun HomeScreen(
                             .clip(CircleShape)
                             .background(Color.LightGray)
                     )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Search for books above",
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    Text(
-                        text = "${allBooks.size} books available",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(top = 8.dp)
-                    )
                 }
             } else {
                 // Search results list
@@ -153,14 +131,6 @@ fun HomeScreen(
                                 text = "No books found for \"$searchQuery\"",
                                 style = MaterialTheme.typography.bodyLarge,
                                 textAlign = TextAlign.Center
-                            )
-                            Spacer(modifier = Modifier.height(8.dp))
-                            Text(
-                                text = "Try searching for: Harry Potter, Throne of Glass, Mockingbird, or Narnia",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                textAlign = TextAlign.Center,
-                                modifier = Modifier.padding(horizontal = 32.dp)
                             )
                         }
                     }
@@ -174,7 +144,7 @@ fun HomeScreen(
                             BookItem(
                                 book = book,
                                 onBookClick = { onBookClick(book.id) },
-                                onFavoriteClick = { viewModel.toggleFavorite(book.id, book.isFavorite) }
+                                onFavoriteClick = { viewModel.toggleFavorite(book.id, !book.isFavorite) }
                             )
                         }
                     }
