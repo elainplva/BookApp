@@ -14,10 +14,7 @@ import com.example.bookapp.ui.theme.BookAppTheme
 import com.example.bookapp.workers.DataSyncWorker
 import java.util.concurrent.TimeUnit
 
-/**
- * Main Activity - Entry point of the application
- * Sets up navigation and schedules background work
- */
+
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +35,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    /**
-     * Schedule periodic data sync using WorkManager
-     * Runs once per day
-     */
+
     private fun scheduleDataSync() {
         val constraints = Constraints.Builder()
             .setRequiredNetworkType(NetworkType.CONNECTED)

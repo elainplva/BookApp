@@ -9,7 +9,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.example.bookapp.data.local.database.BookDatabase
+import com.example.bookapp.BookApplication
 import com.example.bookapp.data.repository.BookRepository
 import com.example.bookapp.data.repository.UserRepository
 import com.example.bookapp.ui.screens.auth.AuthViewModel
@@ -69,21 +69,16 @@ sealed class Screen(val route: String) {
     object Settings : Screen("settings")
 }
 
-/**
- * Main Navigation Graph
- * Defines all navigation routes and their corresponding screens
- * Manages navigation between different screens in the app
- *
- * @param navController Navigation controller for handling navigation actions
- */
+
 @Composable
 fun NavGraph(navController: NavHostController) {
     // Get application context
     val context = LocalContext.current
+    val application = context.applicationContext as BookApplication
 
     // Initialize database and repositories
     // Use remember to create instances only once and survive recompositions
-    val database = remember { BookDatabase.getDatabase(context) }
+    val database = remember { application.database }
     val bookRepository = remember { BookRepository(database.bookDao()) }
     val userRepository = remember { UserRepository(database.userDao()) }
 
@@ -93,9 +88,7 @@ fun NavGraph(navController: NavHostController) {
         startDestination = Screen.Home.route
     ) {
 
-        // ==========================================
-        // HOME SCREEN ROUTE
-        // ==========================================
+
         composable(route = Screen.Home.route) {
             // Create ViewModel with factory
             val viewModel: HomeViewModel = viewModel(
@@ -124,9 +117,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
 
-        // ==========================================
-        // BOOK DETAIL SCREEN ROUTE
-        // ==========================================
+
         composable(
             route = Screen.BookDetail.route,
             arguments = listOf(
@@ -154,9 +145,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
 
-        // ==========================================
-        // FAVORITES SCREEN ROUTE
-        // ==========================================
+
         composable(route = Screen.Favorites.route) {
             // Create ViewModel with factory
             val viewModel: FavoritesViewModel = viewModel(
@@ -200,9 +189,7 @@ fun NavGraph(navController: NavHostController) {
             )
         }
 
-        // ==========================================
-        // SETTINGS SCREEN ROUTE
-        // ==========================================
+
         composable(route = Screen.Settings.route) {
             // Display settings screen (no ViewModel needed)
             SettingsScreen(
@@ -215,17 +202,7 @@ fun NavGraph(navController: NavHostController) {
     }
 }
 
-/**
- * Navigation Helper Functions
- * Provide convenient methods for common navigation actions
- */
 
-/**
- * Navigates to the home screen and clears the back stack
- * Useful for logout or app reset scenarios
- *
- * @param navController Navigation controller
- */
 fun navigateToHomeAndClearBackStack(navController: NavHostController) {
     navController.navigate(Screen.Home.route) {
         // Pop up to the home screen and clear all back stack
@@ -237,12 +214,7 @@ fun navigateToHomeAndClearBackStack(navController: NavHostController) {
     }
 }
 
-/**
- * Navigates to a book detail screen with animation
- *
- * @param navController Navigation controller
- * @param bookId ID of the book to display
- */
+
 fun navigateToBookDetail(navController: NavHostController, bookId: Long) {
     navController.navigate(Screen.BookDetail.createRoute(bookId)) {
         // Avoid multiple copies of the same destination
@@ -250,12 +222,7 @@ fun navigateToBookDetail(navController: NavHostController, bookId: Long) {
     }
 }
 
-/**
- * Safely navigates back, or navigates to home if back stack is empty
- * Prevents app from closing unexpectedly
- *
- * @param navController Navigation controller
- */
+
 fun navigateBackSafely(navController: NavHostController) {
     if (!navController.popBackStack()) {
         // If back stack is empty, navigate to home

@@ -9,13 +9,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
-/**
- * Settings Screen
- * Displays app information and settings
- * Shows app version, features, and other configuration options
- *
- * @param onBackClick Callback when back button is clicked
- */
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen(

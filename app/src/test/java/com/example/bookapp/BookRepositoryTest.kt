@@ -15,7 +15,7 @@ class BookRepositoryTest {
         val book = BookEntity(
             title = "Test Book",
             author = "Test Author",
-            description = "Test Synopsis"
+            synopsis = "Test Synopsis"
         )
 
         assertNotNull(book.title)
@@ -27,7 +27,7 @@ class BookRepositoryTest {
         val book = BookEntity(
             title = "Test",
             author = "Author",
-            description = "Synopsis",
+            synopsis = "Synopsis",
             rating = 4.5f
         )
 
@@ -40,7 +40,7 @@ class BookRepositoryTest {
         var book = BookEntity(
             title = "Test",
             author = "Author",
-            description = "Synopsis",
+            synopsis = "Synopsis",
             isFavorite = false
         )
 

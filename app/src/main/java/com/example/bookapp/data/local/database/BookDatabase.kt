@@ -11,10 +11,6 @@ import com.example.bookapp.data.local.entities.BookEntity
 import com.example.bookapp.data.local.entities.NoteEntity
 import com.example.bookapp.data.local.entities.UserEntity
 
-/**
- * Room Database for the Book App
- * Contains books, users, and notes tables
- */
 @Database(
     entities = [BookEntity::class, UserEntity::class, NoteEntity::class],
     version = 1,
@@ -30,9 +26,6 @@ abstract class BookDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: BookDatabase? = null
 
-        /**
-         * Get database instance (Singleton pattern)
-         */
         fun getDatabase(context: Context): BookDatabase {
             return INSTANCE ?: synchronized(this) {
                 val instance = Room.databaseBuilder(
@@ -40,6 +33,7 @@ abstract class BookDatabase : RoomDatabase() {
                     BookDatabase::class.java,
                     "book_database"
                 )
+                    .allowMainThreadQueries() // Allow queries on the main thread (temporary fix)
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance

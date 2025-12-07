@@ -56,7 +56,7 @@ class BookDetailViewModel(
     fun toggleFavorite() {
         viewModelScope.launch {
             _book.value?.let { currentBook ->
-                repository.toggleFavorite(currentBook.id, currentBook.isFavorite)
+                repository.toggleFavorite(currentBook.id, !currentBook.isFavorite)
                 loadBook()
             }
         }
