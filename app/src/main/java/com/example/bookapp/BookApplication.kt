@@ -11,7 +11,7 @@ import com.example.bookapp.data.repository.UserRepository
  */
 class BookApplication : Application(), Configuration.Provider {
 
-    // Using by lazy so the database and repositories are only created when they're first needed
+    // Using by lazy so the database and repositories are only created when they're first needed.
     val database: BookDatabase by lazy { BookDatabase.getDatabase(this) }
     val bookRepository: BookRepository by lazy { BookRepository(database.bookDao()) }
     val userRepository: UserRepository by lazy { UserRepository(database.userDao()) }

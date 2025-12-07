@@ -12,7 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.example.bookapp.data.local.entities.BookEntity
@@ -109,7 +108,7 @@ private fun BookDetailContent(
         // Book Header Section
         BookHeaderSection(book = book)
 
-        HorizontalDivider(
+        Divider(
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.outlineVariant
         )
@@ -117,7 +116,7 @@ private fun BookDetailContent(
         // Synopsis Section
         SynopsisSection(synopsis = book.synopsis)
 
-        HorizontalDivider(
+        Divider(
             thickness = 1.dp,
             color = MaterialTheme.colorScheme.outlineVariant
         )
@@ -157,12 +156,6 @@ private fun BookDetailContent(
         }
     }
 }
-
-@Composable
-fun HorizontalDivider(thickness: Dp, color: Color) {
-    TODO("Not yet implemented")
-}
-
 
 @Composable
 private fun BookHeaderSection(book: BookEntity) {
