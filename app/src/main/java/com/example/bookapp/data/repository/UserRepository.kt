@@ -3,6 +3,7 @@ package com.example.bookapp.data.repository
 import com.example.bookapp.data.local.dao.UserDao
 import com.example.bookapp.data.local.entities.UserEntity
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 
 /**
  * Repository for User data operations
@@ -36,5 +37,13 @@ class UserRepository(private val userDao: UserDao) {
     // Logout current user
     suspend fun logout() {
         userDao.logoutAll()
+    }
+
+    // Delete current user
+    suspend fun deleteCurrentUser() {
+        val user = currentUser.first()
+        if (user != null) {
+            userDao.deleteUser(user)
+        }
     }
 }

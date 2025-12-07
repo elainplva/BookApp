@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Lock
@@ -25,7 +26,8 @@ import androidx.compose.ui.unit.dp
 fun SettingsScreen(
     viewModel: SettingsViewModel,
     onBackClick: () -> Unit,
-    onAccountClick: () -> Unit
+    onAccountClick: () -> Unit,
+    onPrivacyClick: () -> Unit
 ) {
     val theme by viewModel.theme.collectAsState()
 
@@ -46,7 +48,7 @@ fun SettingsScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
                 .padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             SettingItem(icon = Icons.Default.Settings, text = "Theme: $theme") {
                 val nextTheme = when (theme) {
@@ -57,7 +59,7 @@ fun SettingsScreen(
                 viewModel.setTheme(nextTheme)
             }
             SettingItem(icon = Icons.Default.Person, text = "Account", onClick = onAccountClick)
-            SettingItem(icon = Icons.Default.Lock, text = "Privacy")
+            SettingItem(icon = Icons.Default.Lock, text = "Privacy", onClick = onPrivacyClick)
         }
     }
 }
@@ -69,9 +71,9 @@ private fun SettingItem(icon: androidx.compose.ui.graphics.vector.ImageVector, t
             .fillMaxWidth()
             .clickable(enabled = onClick != null, onClick = { onClick?.invoke() }),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(16.dp)
+        horizontalArrangement = Arrangement.spacedBy(20.dp)
     ) {
-        Icon(icon, contentDescription = null)
+        Icon(icon, contentDescription = null, modifier = Modifier.size(30.dp))
         Text(text, style = MaterialTheme.typography.bodyLarge)
     }
 }
