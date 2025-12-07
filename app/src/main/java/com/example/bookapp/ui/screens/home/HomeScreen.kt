@@ -27,6 +27,7 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Upload
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -53,6 +54,12 @@ fun HomeScreen(
 ) {
     val searchQuery by viewModel.searchQuery.collectAsState()
     val books by viewModel.books.collectAsState()
+    val allBooks by viewModel.allBooksForCheck.collectAsState()
+
+    // Auto-load books on first launch
+    LaunchedEffect(Unit) {
+        viewModel.loadBooksIfNeeded()
+    }
 
     Scaffold(
         bottomBar = {
@@ -121,28 +128,53 @@ fun HomeScreen(
                             .clip(CircleShape)
                             .background(Color.LightGray)
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Search for books above",
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+
+                    Text(
+                        text = "${allBooks.size} books available",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(top = 8.dp)
+                    )
                 }
             } else {
                 // Search results list
                 if (books.isEmpty()) {
                     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                        Text(
-                            text = "No books found for \"$searchQuery\"",
-                            style = MaterialTheme.typography.bodyLarge,
-                            textAlign = TextAlign.Center
-                        )
+                        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                            Text(
+                                text = "No books found for \"$searchQuery\"",
+                                style = MaterialTheme.typography.bodyLarge,
+                                textAlign = TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Try searching for: Harry Potter, Throne of Glass, Mockingbird, or Narnia",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier.padding(horizontal = 32.dp)
+                            )
+                        }
                     }
                 } else {
                     LazyColumn(
                         modifier = Modifier.fillMaxSize(),
-                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
                         items(books) { book ->
                             BookItem(
                                 book = book,
                                 onBookClick = { onBookClick(book.id) },
-                                onFavoriteClick = { viewModel.toggleFavorite(book.id, !book.isFavorite) }
+                                onFavoriteClick = { viewModel.toggleFavorite(book.id, book.isFavorite) }
                             )
                         }
                     }
@@ -152,6 +184,10 @@ fun HomeScreen(
     }
 }
 
+/**
+ * Book Item Component
+ * Displays individual book in a card format
+ */
 @Composable
 fun BookItem(
     book: BookEntity,
@@ -170,6 +206,7 @@ fun BookItem(
             horizontalArrangement = Arrangement.spacedBy(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
+            // Book Cover Image
             AsyncImage(
                 model = book.coverUrl,
                 contentDescription = "Book Cover",
@@ -179,12 +216,23 @@ fun BookItem(
                 contentScale = ContentScale.Crop
             )
 
+            // Book Information
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                Text(text = book.title, style = MaterialTheme.typography.titleMedium, maxLines = 2, overflow = TextOverflow.Ellipsis)
-                Text(text = "by ${book.author}", style = MaterialTheme.typography.bodyMedium, maxLines = 1, overflow = TextOverflow.Ellipsis)
+                Text(
+                    text = book.title,
+                    style = MaterialTheme.typography.titleMedium,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = "by ${book.author}",
+                    style = MaterialTheme.typography.bodyMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
                     text = book.synopsis,
@@ -194,6 +242,7 @@ fun BookItem(
                 )
             }
 
+            // Favorite Button
             IconButton(onClick = onFavoriteClick) {
                 Icon(
                     imageVector = if (book.isFavorite) Icons.Filled.Favorite else Icons.Default.FavoriteBorder,
