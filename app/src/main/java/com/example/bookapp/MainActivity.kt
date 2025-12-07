@@ -19,8 +19,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // Schedule background work
-        scheduleDataSync()
+        // Schedule background work (Temporarily disabled for debugging)
+        // scheduleDataSync()
 
         setContent {
             BookAppTheme {

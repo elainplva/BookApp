@@ -33,7 +33,6 @@ abstract class BookDatabase : RoomDatabase() {
                     BookDatabase::class.java,
                     "book_database"
                 )
-                    .allowMainThreadQueries() // Allow queries on the main thread (temporary fix)
                     .fallbackToDestructiveMigration()
                     .build()
                 INSTANCE = instance
